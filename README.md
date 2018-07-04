@@ -2,11 +2,13 @@
 ==
 1.可以自动识别gif和普通图片,直接加载gif或普通图片
 --
-    ```
-    [imageView jj_setImageWithUrl:[NSURL URLWithString:@"https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-5/201851120571622260.gif"]];
-        ```
+    `
+    [imageView jj_setImageWithUrl:@"网络图片地址"];
+        `
 2.本地缓存,再一次加载会直接加载本地缓存图片
+--
 3.可以加载本地gif图来作为placehoulder
-    ```
-    [imageView jj_setImageWithUrl:[NSURL URLWithString:@"https://upfile.asqql.com/2009pasdfasdfic2009s305985-ts/2018-5/201851120571622260.gif"] placeholder:[UIImage jj_getLocationGIFWithContentFile:[[NSBundle mainBundle] pathForResource:@"loading.gif" ofType:nil]]];
-        ```
+--
+    `
+    [imageView jj_setImageWithUrl:@"网络图片地址" placeholder:[UIImage jj_getLocationGIFWithContentFile:@"本地gif图片地址"]];
+        `
