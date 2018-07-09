@@ -1,14 +1,41 @@
-很详细的介绍了图片加载与缓存的详细流程:
-==
-1.可以自动识别gif和普通图片,直接加载gif或普通图片
+○具有什么特点?
 --
-    `
-    [imageView jj_setImageWithUrl:@"网络图片地址"];
-        `
-2.本地缓存,再一次加载会直接加载本地缓存图片
+1.图片本地缓存,下次使用
+2.直接加载网络/本地gif图片
+3.实时获取到网络图片的下载进度
+4.一键获取图片缓存,一键清空图片缓存
+5.一键获取网络图片尺寸
+6.文件简单,拖进项目即可使用
+
+○怎么使用?
 --
-3.可以加载本地gif图来作为placehoulder
---
-    `
-    [imageView jj_setImageWithUrl:@"网络图片地址" placeholder:[UIImage jj_getLocationGIFWithContentFile:@"本地gif图片地址"]];
-        `
+直接加载图片
+`
+[imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"]];
+`
+加载图片并获取图片下载进度
+`
+[imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] progress:^(CGFloat value) {
+NSLog(@"%f",value);
+}];
+`
+加载图片并获取图片下载进度,设置placrhould普通图片
+`
+[imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] placeholder:[UIImage imageNamed:@"占位图片"] progress:^(CGFloat value) {
+NSLog(@"%f",value);
+}];
+`
+加载图片并获取图片下载进度,设置placrhould本地图片(可以使本地gif图片)
+`
+[imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] placeholder:[UIImage jj_getLocationGIFWithContentFile:[[NSBundle mainBundle] pathForResource:@"本地gif图" ofType:nil]] progress:^(CGFloat value) {
+NSLog(@"%f",value);
+}];
+`
+        
+        
+        
+        
+        
+        
+        
+        
