@@ -9,23 +9,26 @@
 
 ○怎么使用?
 --
-直接加载图片</br>
+1.直接加载图片</br>
 `
 [imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"]];
 `</br>
-加载图片并获取图片下载进度</br>
+</br>
+2.加载图片并获取图片下载进度</br>
 `
 [imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] progress:^(CGFloat value) {
 NSLog(@"%f",value);
 }];
 `</br>
-加载图片并获取图片下载进度,设置placrhould普通图片</br>
+</br>
+3.加载图片并获取图片下载进度,设置placrhould普通图片</br>
 `
 [imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] placeholder:[UIImage imageNamed:@"占位图片"] progress:^(CGFloat value) {
 NSLog(@"%f",value);
 }];
 `</br>
-加载图片并获取图片下载进度,设置placrhould本地图片(可以使本地gif图片)</br>
+</br>
+4.加载图片并获取图片下载进度,设置placrhould本地图片(可以使本地gif图片)</br>
 `
 [imageView jj_setImageWithUrl:[NSURL URLWithString:@"图片url"] placeholder:[UIImage jj_getLocationGIFWithContentFile:[[NSBundle mainBundle] pathForResource:@"本地gif图" ofType:nil]] progress:^(CGFloat value) {
 NSLog(@"%f",value);
