@@ -58,13 +58,25 @@
     NSString *urlStr = url.absoluteString;
     if (!urlStr) return;
     
-    // 异步操作，提高性能
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    JJWebImageManager *manager = [JJWebImageManager manager];
+    // 判断内存是否有缓存
+    if ([manager.imageCache objectForKey:urlStr]) {
         
-        JJWebImageManager *manager = [JJWebImageManager manager];
-        // 判断内存是否有缓存
-        if (![manager.imageCache objectForKey:urlStr]) {
-
+        // 内存中有缓存，直接加载内存缓存图片
+        UIImage *image = [manager.imageCache objectForKey:urlStr];
+        if (image) {
+            // 强制对图片进行解码
+            UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0);
+            [image drawInRect:self.bounds];
+            image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            self.image = image;
+        }
+    }else{
+        
+        // 异步操作，提高性能
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
             // 获取沙盒缓存的根路径
             NSString *document = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
             // 获取图片缓存的根路径
@@ -82,26 +94,8 @@
                 // 如果本地有缓存，直接加载本地图片
                 [self locationImageWithFilePath:filePath urlStr:urlStr];
             }
-        }else{
-            
-            // 内存中有缓存，直接加载内存缓存图片
-            UIImage *image = [manager.imageCache objectForKey:urlStr];
-            if (image) {
-                // 强制对图片进行解码
-                UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0);
-                [image drawInRect:self.bounds];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                
-                // 展示一定要在主线程,否则会卡顿
-                weak(self);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    strong(self);
-                    self.image = image;
-                });
-            }
-        }
-    });
+        });
+    }
 }
 #pragma mark 网络下载会先下载图片，然后在本地存储，最后加载本地图片
 - (void)locationImageWithFilePath:(NSString *)filePath
@@ -112,13 +106,13 @@
     
     // 判断是否是本地gif
     if ([self is_gif:url]) {
-
+        
         // 加载本地gif图片
         [self jj_getGIFWithUrl:url];
     }else{
         NSData *imgData = [NSData dataWithContentsOfFile:filePath];
         UIImage *image = [UIImage imageWithData:imgData];
-
+        
         if (image) [manager.imageCache setObject:image forKey:urlStr];
         // 展示一定要在主线程,否则会卡顿
         weak(self);
@@ -257,3 +251,4 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite{
     return outputStr;
 }
 @end
+
